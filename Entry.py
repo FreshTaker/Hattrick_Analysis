@@ -27,9 +27,13 @@ def read_using_pd():
     print(df.columns.tolist())
 
 def analyze_pd():
-    print('empty')
-    
-    
+    print(empty)
+#ensure data types for columns are correct
+#do calculations for the 18 positions
+#run optimization routine (series of equations)
+# with and without assigned training
+#print best layout
+
 def plot_pd():
     df.plot.bar(x='Experience',y='Name')
                
