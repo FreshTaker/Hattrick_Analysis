@@ -27,16 +27,22 @@ def read_using_pd():
     print(df.columns.tolist())
 
 def analyze_pd():
-    print(empty)
+    print(' ')
+    df.dtypes
+    
 #ensure data types for columns are correct
 #do calculations for the 18 positions
 #run optimization routine (series of equations)
 # with and without assigned training
 #print best layout
 
+#1) Analyze all team members for all positions.
+#2) Assign players based on optimal positions, eliminated those taken
+#3) Make a short hand print out or CSV listing player with position.
+
 def plot_pd():
-    df.plot.bar(x='Experience',y='Name')
-               
+    #df.plot.bar(x='Experience',y='Name')
+    print('No plot to see here')
 if __name__ == "__main__":
     main()
     read_using_pd()
