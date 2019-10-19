@@ -30,6 +30,12 @@ def analyze_pd():
     print(' ')
     df.dtypes
     
+def player_contrib(position, name):
+    #this is to plug in the player's name and position to get the
+    #impact the player has on the team.
+    
+    return [team_ATT, team_WD, team_D]
+
 #ensure data types for columns are correct
 #do calculations for the 18 positions
 #run optimization routine (series of equations)
