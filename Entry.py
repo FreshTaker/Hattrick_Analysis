@@ -33,7 +33,18 @@ def analyze_pd():
 def player_contrib(position, name):
     #this is to plug in the player's name and position to get the
     #impact the player has on the team.
+    #reference: https://prnt.sc/mn7guu
+    #reference: https://wiki.hattrick.org/wiki/Skill_contribution
     
+    position = position.upper()
+    #find way to address players attributes faster
+    
+    if position = 'GK':
+        CD = 0.87*df[name].GK + 0.35*df[name].DE
+        SD = 0.61*df[name].GK + 0.25*df[name].DE
+    if position = 'CD':
+        
+
     return [team_ATT, team_WD, team_D]
 
 #ensure data types for columns are correct
