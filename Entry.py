@@ -38,12 +38,14 @@ def player_contrib(name, position):
     
     position = position.upper() #formats inputs
     
-    p = df.loc[name] #allows p['Keeper'] to be called
+    p = df.loc[name] #allows float(p['Keeper']) to be called
+    f = 'float64'
+    df.astype({'Keeper':f, 'Defending':f, 'Playmaking':f, 'Winger':f, 'Passing':f, 'Scoring':f})
     
     #position List:
-    #[GK, CDD, CLRD, CDW, CDO, WBD, WB, WBM, WBO, WD, W, WM, WD, ICMD, ILRMD, ICM, ILRM, IMW, ICMO, ILRMO, FWD, FW, FWW, FWD]
+    #[GK, CCD, CLRD, CDW, CDO, WBD, WB, WBM, WBO, WD, W, WM, WD, ICMD, ILRMD, ICM, ILRM, IMW, ICMO, ILRMO, FWD, FW, FWW, FWD]
     # GK = Goal Keeper
-    # CDD = Center Central Defender
+    # CCD = Center Central Defender
     # CLRD = Left/Right Central Defender
     # CDW = Central Defneder with Wing Focus
     # CDO = Central Defender with Off. Focus
@@ -70,177 +72,204 @@ def player_contrib(name, position):
     
     if position == 'GK':
         #Goal Keeper
-        CD = 0.87*p['Keeper'] + 0.35*p['Defending']
-        SD = 0.61*p['Keeper'] + 0.25*p['Defending']
+        CD = 0.87*float(p['Keeper']) + 0.35*float(p['Defending'])
+        SD = 0.61*float(p['Keeper']) + 0.25*float(p['Defending'])
         
     if position == 'CCD':
         #Center Central Defender
-        SD = 0.26*p['Defending']
-        CD = 1.0*p['Defending']
-        MID = 0.25*p['Playmaking']
+        SD = 0.26*float(p['Defending'])
+        CD = 1.0*float(p['Defending'])
+        MID = 0.25*float(p['Playmaking'])
         
     if position == 'CLRD':
         #Left/right Central Defender
-        SD = 0.52*p['Defending']
-        CD = 1.0*p['Defending']
-        MID = 0.25*p['Playmaking']
+        SD = 0.52*float(p['Defending'])
+        CD = 1.0*float(p['Defending'])
+        MID = 0.25*float(p['Playmaking'])
         
     if position == 'CDW':
         #Central Defender with Wing Focus
-        SD = 0.81*p['Defending']
-        CD = 0.67*p['Defending']
-        MID = 0.15*p['Playmaking']
-        SA = 0.26 * p['Winger']
+        SD = 0.81*float(p['Defending'])
+        CD = 0.67*float(p['Defending'])
+        MID = 0.15*float(p['Playmaking'])
+        SA = 0.26 * float(p['Winger'])
         
     if position == 'CDO':
         #Central Defender with Off. Focus
-        SD = 0.20*p['Defending']
-        CD = 0.40*p['Defending']
-        MID = 0.73*p['Playmaking']
-        SA = 0.40 * p['Winger']       
+        SD = 0.20*float(p['Defending'])
+        CD = 0.40*float(p['Defending'])
+        MID = 0.73*float(p['Playmaking'])
+        SA = 0.40 * float(p['Winger'])       
     
     if position == 'WBD':
         #Wingback with Def focus
-        SD = 1.0 * p['Defending']
-        CD = 0.43 * p['Defending']
-        MID = 0.10*p['Playmaking']
-        SA = 0.45 *p['Winger']
+        SD = 1.0 * float(p['Defending'])
+        CD = 0.43 * float(p['Defending'])
+        MID = 0.10*float(p['Playmaking'])
+        SA = 0.45 *float(p['Winger'])
     
     if position == 'WB':
         #Wingback
-        SD = 0.92 * p['Defending']
-        CD = 0.38 * p['Defending']
-        MID = 0.15*p['Playmaking']
-        SA = 0.59 *p['Winger']
+        SD = 0.92 * float(p['Defending'])
+        CD = 0.38 * float(p['Defending'])
+        MID = 0.15*float(p['Playmaking'])
+        SA = 0.59 *float(p['Winger'])
         
     if position == 'WBM':
         #Wingback with Mid Focus
-        SD = 0.75 * p['Defending']
-        CD = 0.70 * p['Defending']
-        MID = 0.20 *p['Playmaking']
-        SA = 0.39 *p['Winger']
+        SD = 0.75 * float(p['Defending'])
+        CD = 0.70 * float(p['Defending'])
+        MID = 0.20 *float(p['Playmaking'])
+        SA = 0.39 *float(p['Winger'])
         
     if position == 'WBO':
         #Wingback with Off Focus
-        SD = 0.74 * p['Defending']
-        CD = 0.35 * p['Defending']
-        MID = 0.20 *p['Playmaking']
-        SA = 0.69 *p['Winger']
+        SD = 0.74 * float(p['Defending'])
+        CD = 0.35 * float(p['Defending'])
+        MID = 0.20 *float(p['Playmaking'])
+        SA = 0.69 *float(p['Winger'])
         
     if position == 'WD':
         #Winger with Def Focus
-        SD = 0.61 * p['Defending']
-        CD = 0.25 * p['Defending']
-        MID = 0.30 *p['Playmaking']
-        SA = 0.69 *p['Winger'] + 0.21*p['Passing']
-        CA = 0.05*p['Passing']
+        SD = 0.61 * float(p['Defending'])
+        CD = 0.25 * float(p['Defending'])
+        MID = 0.30 *float(p['Playmaking'])
+        SA = 0.69 *float(p['Winger']) + 0.21*float(p['Passing'])
+        CA = 0.05*float(p['Passing'])
     
     if position == 'W':
         #Winger
-        SD = 0.35 * p['Defending']
-        CD = 0.20 * p['Defending']
-        MID = 0.45 *p['Playmaking']
-        SA = 0.86 *p['Winger'] + 0.26*p['Passing']
-        CA = 0.11*p['Passing']
+        SD = 0.35 * float(p['Defending'])
+        CD = 0.20 * float(p['Defending'])
+        MID = 0.45 *float(p['Playmaking'])
+        SA = 0.86 *float(p['Winger']) + 0.26*float(p['Passing'])
+        CA = 0.11*float(p['Passing'])
         
     if position == 'WM':
         #Winger wih Mid Focus
-        SD = 0.29 * p['Defending']
-        CD = 0.25 * p['Defending']
-        MID = 0.55 *p['Playmaking']
-        SA = 0.74 *p['Winger'] + 0.15*p['Passing']
-        CA = 0.16*p['Passing']
+        SD = 0.29 * float(p['Defending'])
+        CD = 0.25 * float(p['Defending'])
+        MID = 0.55 *float(p['Playmaking'])
+        SA = 0.74 *float(p['Winger']) + 0.15*float(p['Passing'])
+        CA = 0.16*float(p['Passing'])
         
     if position == 'WO':
         #Winger with Off Focus
-        SD = 0.22 * p['Defending']
-        CD = 0.13 * p['Defending']
-        MID = 0.30 *p['Playmaking']
-        SA = 0.100 *p['Winger'] + 0.29*p['Passing']
-        CA = 0.13*p['Passing']
+        SD = 0.22 * float(p['Defending'])
+        CD = 0.13 * float(p['Defending'])
+        MID = 0.30 *float(p['Playmaking'])
+        SA = 0.100 *float(p['Winger']) + 0.29*float(p['Passing'])
+        CA = 0.13*float(p['Passing'])
     
     if position == 'ICMD':
         #Inner Center Midfielder with Def Focus
-        SD = 0.14 * p['Defending']
-        CD = 0.58 * p['Defending']
-        MID = 0.95 *p['Playmaking']
-        SA = 0.07 *p['Passing']
-        CA = 0.18*p['Passing'] + 0.13*p['Scoring']
+        SD = 0.14 * float(p['Defending'])
+        CD = 0.58 * float(p['Defending'])
+        MID = 0.95 *float(p['Playmaking'])
+        SA = 0.07 *float(p['Passing'])
+        CA = 0.18*float(p['Passing']) + 0.13*float(p['Scoring'])
     
     if position == 'ILRMD':
         #Inner L/R Midfielder with Def. Focus
-        SD = 0.27 * p['Defending']
-        CD = 0.58 * p['Defending']
-        MID = 0.95 *p['Playmaking']
-        SA = 0.14 *p['Passing']
-        CA = 0.18*p['Passing'] + 0.13*p['Scoring']
+        SD = 0.27 * float(p['Defending'])
+        CD = 0.58 * float(p['Defending'])
+        MID = 0.95 *float(p['Playmaking'])
+        SA = 0.14 *float(p['Passing'])
+        CA = 0.18*float(p['Passing']) + 0.13*float(p['Scoring'])
     
     if position == 'ICM':
         #Inner Central Midfielder
-        SD = 0.09 * p['Defending']
-        CD = 0.40 * p['Defending']
-        MID = 1.0 *p['Playmaking']
-        SA = 0.13 *p['Passing']
-        CA = 0.33*p['Passing'] + 0.22*p['Scoring']
+        SD = 0.09 * float(p['Defending'])
+        CD = 0.40 * float(p['Defending'])
+        MID = 1.0 *float(p['Playmaking'])
+        SA = 0.13 *float(p['Passing'])
+        CA = 0.33*float(p['Passing']) + 0.22*float(p['Scoring'])
     
     if position == 'ILRM':
         #Inner L/R Midfielder
-        SD = 0.19 * p['Defending']
-        CD = 0.40 * p['Defending']
-        MID = 1.0 *p['Playmaking']
-        SA = 0.26 *p['Passing']
-        CA = 0.33*p['Passing'] + 0.22*p['Scoring']
+        SD = 0.19 * float(p['Defending'])
+        CD = 0.40 * float(p['Defending'])
+        MID = 1.0 *float(p['Playmaking'])
+        SA = 0.26 *float(p['Passing'])
+        CA = 0.33*float(p['Passing']) + 0.22*float(p['Scoring'])
     
     if position == 'IMW':
         #Inner Midfielder w/ Winger Focus
-        SD = 0.24 * p['Defending']
-        CD = 0.33 * p['Defending']
-        MID = 0.9 *p['Playmaking']
-        SA = 0.31 *p['Passing'] + 0.59 * p['Winger']
-        CA = 0.23*p['Passing']
+        SD = 0.24 * float(p['Defending'])
+        CD = 0.33 * float(p['Defending'])
+        MID = 0.9 *float(p['Playmaking'])
+        SA = 0.31 *float(p['Passing']) + 0.59 * float(p['Winger'])
+        CA = 0.23*float(p['Passing'])
         
     if position == 'ICMO':
         #Inner Central Midfielder w/ Off. Focus
-        SD = 0.04 * p['Defending']
-        CD = 0.16 * p['Defending']
-        MID = 0.95 *p['Playmaking']
-        SA = 0.18 *p['Passing']
-        CA = 0.49*p['Passing'] + 0.31*p['Scoring']
+        SD = 0.04 * float(p['Defending'])
+        CD = 0.16 * float(p['Defending'])
+        MID = 0.95 *float(p['Playmaking'])
+        SA = 0.18 *float(p['Passing'])
+        CA = 0.49*float(p['Passing']) + 0.31*float(p['Scoring'])
     
     if position == 'ILRMO':
         #Inner L/R Midfielder w/ Off. Focus
-        SD = 0.09 * p['Defending']
-        CD = 0.16 * p['Defending']
-        MID = 0.95 *p['Playmaking']
-        SA = 0.36 *p['Passing']
-        CA = 0.49*p['Passing'] + 0.31*p['Scoring']
+        SD = 0.09 * float(p['Defending'])
+        CD = 0.16 * float(p['Defending'])
+        MID = 0.95 *float(p['Playmaking'])
+        SA = 0.36 *float(p['Passing'])
+        CA = 0.49*float(p['Passing']) + 0.31*float(p['Scoring'])
         
     if position == 'FWD':
         #Forward with Def. Focus
-        SA = 0.13*p['Scoring'] + 0.14*p['Winger']+0.31*p['Passing']
-        CA = 0.56*p['Scoring'] + 0.53*p['Passing']
-        MID = 0.35*p['Playmaking']
+        SA = 0.13*float(p['Scoring']) + 0.14*float(p['Winger'])+0.31*float(p['Passing'])
+        CA = 0.56*float(p['Scoring']) + 0.53*float(p['Passing'])
+        MID = 0.35*float(p['Playmaking'])
     
     if position == 'FW':
         #Forward
-        SA = 0.221*p['Scoring']+0.18*p['Winger']+0.121*p['Passing']
-        CA = 1.0*p['Scoring'] + 0.369*p['Passing']
-        MID = 0.25*p['Playmaking']
+        SA = 0.221*float(p['Scoring'])+0.18*float(p['Winger'])+0.121*float(p['Passing'])
+        CA = 1.0*float(p['Scoring']) + 0.369*float(p['Passing'])
+        MID = 0.25*float(p['Playmaking'])
         
     if position == 'FWW':
         #Forward with Winger Focus
-        SA = 0.51*p['Scoring']+0.64*p['Winger']+0.21*p['Passing']
-        CA = 0.66*p['Scoring']+0.23*p['Passing']
-        MID = 0.15*p['Playmaking']
+        SA = 0.51*float(p['Scoring'])+0.64*float(p['Winger'])+0.21*float(p['Passing'])
+        CA = 0.66*float(p['Scoring'])+0.23*float(p['Passing'])
+        MID = 0.15*float(p['Playmaking'])
         #***something might be missing here***
         
     if position == 'FWD':
         #Forward with Def. Focus
-        SA = 0.13*p['Scoring']+0.13*p['Winger']+0.41*p['Passing']
-        CA = 0.56*p['Scoring']+0.53*p['Passing']
-        MID = 0.35*p['Playmaking']
+        SA = 0.13*float(p['Scoring'])+0.13*float(p['Winger'])+0.41*float(p['Passing'])
+        CA = 0.56*float(p['Scoring'])+0.53*float(p['Passing'])
+        MID = 0.35*float(p['Playmaking'])
     
     return [CD, SD, MID, SA, CA]
+
+def top5spots():
+    pos_positions = ['GK', 'CCD', 'CLRD', 'CDW', 'CDO', 'WBD', 'WB', 'WBM', 'WBO', 'WD', 'W', 'WM', 'WD', 'ICMD', 'ILRMD', 'ICM', 'ILRM', 'IMW', 'ICMO', 'ILRMO', 'FWD', 'FW', 'FWW', 'FWD']
+    df1_rows = ['POS','CD','SD','MID','SA','CA', 'SUM']
+    df_names = ['Leider Moncada', 'Stuart Bates']
+    
+    for g in df_names:
+        for i in pos_positions:
+            a = player_contrib(g,i)
+            #a.append(i)
+            sum_a = 0
+            for n in a:
+                sum_a = sum_a+n
+            a.append(sum_a)
+            if i == 'GK':
+                dict1 = {i:a}
+            else:
+                dict1[i] = a
+        df1=pd.DataFrame(dict1)
+        #df1.iloc[5] #selecting just the sum
+        df1=df1.tail(1)
+        df1=pd.melt(df1)
+        result = df1.nlargest(5,'value')
+        print(g)
+        print(result)
+    
+
 
 #ensure data types for columns are correct
 #do calculations for the 18 positions
@@ -260,22 +289,10 @@ if __name__ == "__main__":
     read_using_pd()
     analyze_pd()
     plot_pd()
-    a = player_contrib('Austin Sanders','GK')
-    print(a)
-    
-    pos_positions = ['GK', 'CDD', 'CLRD', 'CDW', 'CDO', 'WBD', 'WB', 'WBM', 'WBO', 'WD', 'W', 'WM', 'WD', 'ICMD', 'ILRMD', 'ICM', 'ILRM', 'IMW', 'ICMO', 'ILRMO', 'FWD', 'FW', 'FWW', 'FWD']
-    df1_columns = ['CD','SD','MID','SA','CA','POS']
-                     
-    for i in pos_positions:
-        a = player_contrib('Austin Sanders',i)
-        a.append(i)
-        if i == 'GK':
             df1 = pd.DataFrame(a)
-        else:
-            df1 = pd.merge(df1, pd.DataFrame(a), how='outer', on=0)
+    top5spots()
     
-    print('done')
-
+ 
                 
             
             
