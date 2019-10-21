@@ -24,6 +24,7 @@ def load_csv():
 def read_using_pd():
     global df #dataframe
     df = pd.read_csv(INPUT_DIR, skiprows=0, index_col='Name')
+    df_names = pd.read_csv(INPUT_DIR, skiprows=0)
     print(df.columns.tolist())
 
 def analyze_pd():
@@ -247,8 +248,9 @@ def player_contrib(name, position):
 def top5spots():
     pos_positions = ['GK', 'CCD', 'CLRD', 'CDW', 'CDO', 'WBD', 'WB', 'WBM', 'WBO', 'WD', 'W', 'WM', 'WD', 'ICMD', 'ILRMD', 'ICM', 'ILRM', 'IMW', 'ICMO', 'ILRMO', 'FWD', 'FW', 'FWW', 'FWD']
     df1_rows = ['POS','CD','SD','MID','SA','CA', 'SUM']
-    df_names = ['Leider Moncada', 'Stuart Bates']
-    
+    df_names = df_names['Name'] #test
+    print(df_names.size())
+   
     for g in df_names:
         for i in pos_positions:
             a = player_contrib(g,i)
@@ -289,7 +291,6 @@ if __name__ == "__main__":
     read_using_pd()
     analyze_pd()
     plot_pd()
-            df1 = pd.DataFrame(a)
     top5spots()
     
  
