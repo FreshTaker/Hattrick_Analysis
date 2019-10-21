@@ -24,7 +24,7 @@ def load_csv():
 def read_using_pd():
     global df #dataframe
     df = pd.read_csv(INPUT_DIR, skiprows=0, index_col='Name')
-    df_names = pd.read_csv(INPUT_DIR, skiprows=0)
+    df0 = pd.read_csv(INPUT_DIR, skiprows=0)
     print(df.columns.tolist())
 
 def analyze_pd():
@@ -248,8 +248,16 @@ def player_contrib(name, position):
 def top5spots():
     pos_positions = ['GK', 'CCD', 'CLRD', 'CDW', 'CDO', 'WBD', 'WB', 'WBM', 'WBO', 'WD', 'W', 'WM', 'WD', 'ICMD', 'ILRMD', 'ICM', 'ILRM', 'IMW', 'ICMO', 'ILRMO', 'FWD', 'FW', 'FWW', 'FWD']
     df1_rows = ['POS','CD','SD','MID','SA','CA', 'SUM']
-    df_names = df_names['Name'] #test
+    
+    #Need to filter out the Coach (use Coach Column)
+    #test
+    df_names = df0['Name']
+    df_names1 = df0.loc[df0['Coach'] != 1, ['Name']] #Select all the Names, but the one that is the Coach
+    
     print(df_names.size())
+    # If having trouble iterating through the dataframe, see this:
+    #  https://stackoverflow.com/questions/16476924/how-to-iterate-over-rows-in-a-dataframe-in-pandas
+    #  https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.itertuples.html
    
     for g in df_names:
         for i in pos_positions:
