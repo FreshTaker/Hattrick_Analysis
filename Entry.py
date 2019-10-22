@@ -22,7 +22,7 @@ def load_csv():
             print(row)
             
 def read_using_pd():
-    global df #dataframe
+    global df,df0 #dataframe
     df = pd.read_csv(INPUT_DIR, skiprows=0, index_col='Name')
     df0 = pd.read_csv(INPUT_DIR, skiprows=0)
     print(df.columns.tolist())
@@ -252,9 +252,9 @@ def top5spots():
     #Need to filter out the Coach (use Coach Column)
     #test
     df_names = df0['Name']
-    df_names1 = df0.loc[df0['Coach'] != 1, ['Name']] #Select all the Names, but the one that is the Coach
+    #df_names = df0.loc[df0['Coach'] != 1, ['Name']] #Select all the Names, but the one that is the Coach
     
-    print(df_names.size())
+    #print(df_names.size())
     # If having trouble iterating through the dataframe, see this:
     #  https://stackoverflow.com/questions/16476924/how-to-iterate-over-rows-in-a-dataframe-in-pandas
     #  https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.itertuples.html
@@ -278,8 +278,6 @@ def top5spots():
         result = df1.nlargest(5,'value')
         print(g)
         print(result)
-    
-
 
 #ensure data types for columns are correct
 #do calculations for the 18 positions
