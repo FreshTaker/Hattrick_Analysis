@@ -301,6 +301,9 @@ def topspotsdf(integer):
                 dict1 = {i:a}
             else:
                 dict1[i] = a
+                
+        #last_position = df0['Last match position']
+        #df0.loc[df0['Name']==g,['Last match position']]
         df1=pd.DataFrame(dict1)
         #df1.iloc[5] #selecting just the sum
         df1=df1.tail(1) #selecting just the sum
