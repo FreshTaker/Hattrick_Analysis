@@ -7,6 +7,7 @@ import tkinter
 import matplotlib
 from tkinter.filedialog import askopenfilename
 import pandas as pd
+import openpyxl
 
 def main():
     global INPUT_DIR
@@ -276,8 +277,52 @@ def top5spots():
         df1=df1.tail(1)
         df1=pd.melt(df1)
         result = df1.nlargest(5,'value')
-        print(g)
-        print(result)
+        #print(g)
+        #print(result)
+
+def topspotsdf(integer):
+    pos_positions = ['GK', 'CCD', 'CLRD', 'CDW', 'CDO', 'WBD', 'WB', 'WBM', 'WBO', 'WD', 'W', 'WM', 'WD', 'ICMD', 'ILRMD', 'ICM', 'ILRM', 'IMW', 'ICMO', 'ILRMO', 'FWD', 'FW', 'FWW', 'FWD']
+    df1_rows = ['POS','CD','SD','MID','SA','CA', 'SUM']
+    global g, int_df, result_df
+    result_df = []
+    result_df = pd.DataFrame(result_df)
+    #Need to filter out the Coach (use Coach Column)
+    df_names = df0['Name']
+    x = 0
+    for g in df_names:
+        for i in pos_positions:
+            a = player_contrib(g,i)
+            #a.append(i)
+            sum_a = 0
+            for n in a:
+                sum_a = sum_a+n
+            a.append(sum_a)
+            if i == 'GK':
+                dict1 = {i:a}
+            else:
+                dict1[i] = a
+        df1=pd.DataFrame(dict1)
+        #df1.iloc[5] #selecting just the sum
+        df1=df1.tail(1) #selecting just the sum
+        df1=pd.melt(df1) #Columsn into Rows
+        int_df = df1.nlargest(integer,'value')
+        int_df.columns = ['POS', g]
+        if x == 0:
+            x = x+1
+            result_df = int_df
+        else:
+            result_df = pd.merge(result_df, int_df, how='outer', on='POS')
+
+def result_df_sort():
+    #function to sort result_df from topspotsdf()
+    print('result_df_sort() needs more work')
+    #Add Player's last position right below name
+    #Add Player's age
+    
+def export_result_df(Filename):
+    result_df.to_excel(Filename+'.xlsx')
+    print('Exported')
+    print('Check the folder')
 
 #ensure data types for columns are correct
 #do calculations for the 18 positions
@@ -297,20 +342,13 @@ if __name__ == "__main__":
     read_using_pd()
     analyze_pd()
     plot_pd()
-    top5spots()
+    #top5spots()
+    topspotsdf(10) #Enter in how many top spots
+    result_df_sort() #Needs work
+    x = input('Do you want to export file? y/n:  ')
+    if x == 'y':
+        export_result_df('Team_Results')
+    else:
+        print("That's okay")
+
     
- 
-                
-            
-            
-        
-        
-        
-        
-        
-
-        
-
-
-
-
