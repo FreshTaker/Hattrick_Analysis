@@ -323,7 +323,7 @@ def result_df_sort():
     #Add Player's age
     df_names = df0['Name']
     x=0
-    global dict2
+    global dict2, df2, result_df2
     for i in df_names:
         #print(i)
         p=df.loc[i]
@@ -335,11 +335,11 @@ def result_df_sort():
         else:
             dict2[i]=last_pos
             
-    df2 = pd.DataFrame(data=dict2,index=[0])
-    #result_df = pd.merge(result_df, df2, how='outer')
+    df2 = pd.DataFrame(data=dict2,index=['Last POS'])
+    result_df2 = pd.concat([result_df, df2], sort=False)
     
 def export_result_df(Filename):
-    result_df.to_excel(Filename+'.xlsx')
+    result_df2.to_excel(Filename+'.xlsx')
     print('Exported')
     print('Check the folder')
 
@@ -363,7 +363,7 @@ if __name__ == "__main__":
     plot_pd()
     #top5spots()
     topspotsdf(10) #Enter in how many top spots
-    df2 = result_df_sort() #Needs work
+    result_df_sort() #Needs work
     x = input('Do you want to export file? y/n:  ')
     if x == 'y':
         export_result_df('Team_Results')
