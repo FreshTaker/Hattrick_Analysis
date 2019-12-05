@@ -1,6 +1,12 @@
-# Read CSV file for analysis
+#!/usr/bin/env python 
+# -*- coding: utf-8 -*-
 
-# Made need Firefox
+"""Filename: Entry.py
+    Description: Script retireves CSV export from game, 
+    analyzes the players in every possible position, 
+    and exports data in an excel file.
+    Author: Paul Brockmann
+"""
 import os
 import csv
 import tkinter
@@ -10,12 +16,14 @@ import pandas as pd
 import openpyxl
 
 def main():
+    """Select CSV File"""
     global INPUT_DIR
     tkinter.Tk().withdraw() # Close the root window
     INPUT_DIR = askopenfilename()
     print(INPUT_DIR)
     
 def load_csv():
+    """Load CSV file"""
     with open(INPUT_DIR,newline='',encoding='utf-8') as csvfile:
         print(csv.list_dialects())
         reader = csv.reader(csvfile, dialect='excel')
@@ -23,6 +31,7 @@ def load_csv():
             print(row)
             
 def read_using_pd():
+    """Format data from CSV and load into Panda"""
     global df,df0 #dataframe
     df = pd.read_csv(INPUT_DIR, skiprows=0, index_col='Name')
     df0 = pd.read_csv(INPUT_DIR, skiprows=0)
@@ -33,17 +42,15 @@ def analyze_pd():
     df.dtypes
     
 def player_contrib(name, position):
-    #this is to plug in the player's name and position to get the
-    #impact the player has on the team.
-    #reference: https://prnt.sc/mn7guu
-    #reference: https://wiki.hattrick.org/wiki/Skill_contribution
-    
+    """ Function that outputs the player's rating for that particular
+    position.
+    Reference: https://prnt.sc/mn7guu
+    Reference: https://wiki.hattrick.org/wiki/Skill_contribution
+    """
     position = position.upper() #formats inputs
-    
     p = df.loc[name] #allows float(p['Keeper']) to be called
     f = 'float64'
     df.astype({'Keeper':f, 'Defending':f, 'Playmaking':f, 'Winger':f, 'Passing':f, 'Scoring':f})
-    
     #position List:
     #[GK, CCD, CLRD, CDW, CDO, WBD, WB, WBM, WBO, WD, W, WM, WD, ICMD, ILRMD, ICM, ILRM, IMW, ICMO, ILRMO, FWD, FW, FWW, FWD]
     # GK = Goal Keeper
@@ -281,6 +288,7 @@ def top5spots():
         #print(result)
 
 def topspotsdf(integer):
+    """ Organizes the data and selects the top positions of each player."""
     pos_positions = ['GK', 'CCD', 'CLRD', 'CDW', 'CDO', 'WBD', 'WB', 'WBM', 'WBO', 'WD', 'W', 'WM', 'WD', 'ICMD', 'ILRMD', 'ICM', 'ILRM', 'IMW', 'ICMO', 'ILRMO', 'FWD', 'FW', 'FWW', 'FWD']
     df1_rows = ['POS','CD','SD','MID','SA','CA', 'SUM']
     global g, int_df, result_df
@@ -317,7 +325,7 @@ def topspotsdf(integer):
             result_df = pd.merge(result_df, int_df, how='outer', on='POS')
 
 def result_df_sort():
-    #function to sort result_df from topspotsdf()
+    """ Function to sort result_df from topspotsdf()."""
     print('result_df_sort() needs more work')
     #Add Player's last position right below name
     #Add Player's age
@@ -343,19 +351,10 @@ def export_result_df(Filename):
     print('Exported')
     print('Check the folder')
 
-#ensure data types for columns are correct
-#do calculations for the 18 positions
-#run optimization routine (series of equations)
-# with and without assigned training
-#print best layout
-
-#1) Analyze all team members for all positions.
-#2) Assign players based on optimal positions, eliminated those taken
-#3) Make a short hand print out or CSV listing player with position.
-
 def plot_pd():
     #df.plot.bar(x='Experience',y='Name')
     print('No plot to see here')
+    
 if __name__ == "__main__":
     main()
     read_using_pd()
