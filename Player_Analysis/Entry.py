@@ -1,4 +1,4 @@
-#!/usr/bin/env python 
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 """Filename: Entry.py
@@ -7,13 +7,11 @@
     and exports data in an excel file.
     Author: Paul Brockmann
 """
-import os
+
 import csv
 import tkinter
-import matplotlib
 from tkinter.filedialog import askopenfilename
 import pandas as pd
-import openpyxl
 
 def main():
     """Select CSV File"""
@@ -29,17 +27,15 @@ def load_csv():
         reader = csv.reader(csvfile, dialect='excel')
         for row in reader:
             print(row)
-            
+
+
 def read_using_pd():
     """Format data from CSV and load into Panda"""
-    global df,df0 #dataframe
     df = pd.read_csv(INPUT_DIR, skiprows=0, index_col='Name')
     df0 = pd.read_csv(INPUT_DIR, skiprows=0)
     print(df.columns.tolist())
+    return df, df0
 
-def analyze_pd():
-    print(' ')
-    df.dtypes
     
 def player_contrib(name, position):
     """ Function that outputs the player's rating for that particular
@@ -253,7 +249,7 @@ def player_contrib(name, position):
     
     return [CD, SD, MID, SA, CA]
 
-def top5spots():
+def topSpots():
     pos_positions = ['GK', 'CCD', 'CLRD', 'CDW', 'CDO', 'WBD', 'WB', 'WBM', 'WBO', 'WD', 'W', 'WM', 'WD', 'ICMD', 'ILRMD', 'ICM', 'ILRM', 'IMW', 'ICMO', 'ILRMO', 'FWD', 'FW', 'FWW', 'FWD']
     df1_rows = ['POS','CD','SD','MID','SA','CA', 'SUM']
     
@@ -269,7 +265,7 @@ def top5spots():
    
     for g in df_names:
         for i in pos_positions:
-            a = player_contrib(g,i)
+            a = player_contrib(g, i)
             #a.append(i)
             sum_a = 0
             for n in a:
@@ -287,85 +283,128 @@ def top5spots():
         #print(g)
         #print(result)
 
-def topspotsdf(integer):
+
+def topspotsdf(integer, DF, DF0):
     """ Organizes the data and selects the top positions of each player."""
     pos_positions = ['GK', 'CCD', 'CLRD', 'CDW', 'CDO', 'WBD', 'WB', 'WBM', 'WBO', 'WD', 'W', 'WM', 'WD', 'ICMD', 'ILRMD', 'ICM', 'ILRM', 'IMW', 'ICMO', 'ILRMO', 'FWD', 'FW', 'FWW', 'FWD']
-    df1_rows = ['POS','CD','SD','MID','SA','CA', 'SUM']
-    global g, int_df, result_df
-    result_df = []
-    result_df = pd.DataFrame(result_df)
-    #Need to filter out the Coach (use Coach Column)
-    df_names = df0['Name']
+    df1_rows = ['POS', 'CD', 'SD', 'MID', 'SA', 'CA', 'SUM']
+    #result_df = DF
+    df_names = DF0['Name']
     x = 0
     for g in df_names:
         for i in pos_positions:
-            a = player_contrib(g,i)
+            a = player_contrib(g, i)
             #a.append(i)
             sum_a = 0
             for n in a:
                 sum_a = sum_a+n
             a.append(sum_a)
             if i == 'GK':
-                dict1 = {i:a}
+                dict1 = {i: a}
             else:
                 dict1[i] = a
                 
         #last_position = df0['Last match position']
         #df0.loc[df0['Name']==g,['Last match position']]
-        df1=pd.DataFrame(dict1)
+        df1 = pd.DataFrame(dict1)
         #df1.iloc[5] #selecting just the sum
-        df1=df1.tail(1) #selecting just the sum
-        df1=pd.melt(df1) #Columsn into Rows
-        int_df = df1.nlargest(integer,'value')
+        df1 = df1.tail(1) #selecting just the sum
+        df1 = pd.melt(df1) #Columsn into Rows
+        int_df = df1.nlargest(integer, 'value')
         int_df.columns = ['POS', g]
         if x == 0:
-            x = x+1
+            x += 1
             result_df = int_df
         else:
             result_df = pd.merge(result_df, int_df, how='outer', on='POS')
+    print(result_df)
+    return result_df
 
-def result_df_sort():
+
+def result_df_sort(DF, DF0):
     """ Function to sort result_df from topspotsdf()."""
     print('result_df_sort() needs more work')
     #Add Player's last position right below name
+    try:
+        print(DF['Hossam Ayoub'])
+        print(DF0)
+        df_names = DF0['Name']
+        dict2 = {'POS': 'LAST'}
+        for i in df_names:
+            print(i)
+            p = DF[i]#p = DF.loc[i]
+            last_pos = p['Last match position']
+            dict2[i] = last_pos
+        df2 = pd.DataFrame(data=dict2, index=[22])
+        result_df2 = pd.concat([DF, df2], sort=False)
+    except Exception as e:
+        print(e)
+        result_df2 = DF
     #Add Player's age
-    df_names = df0['Name']
-    x=0
-    global dict2, df2, result_df2
-    for i in df_names:
-        #print(i)
-        p=df.loc[i]
-        last_pos = p['Last match position']
-        #print(last_pos)
-        if x==0:
-            dict2 = {i:last_pos}
-            x=x+1
-        else:
-            dict2[i]=last_pos
-            
-    df2 = pd.DataFrame(data=dict2,index=['Last POS'])
-    result_df2 = pd.concat([result_df, df2], sort=False)
-    
-def export_result_df(Filename):
-    result_df2.to_excel(Filename+'.xlsx')
+    return result_df2
+
+
+def select_starting_roster(DF):
+    """DF starts with players names as columns, rows are 0 - 22"""
+    print('Dropping Coach')
+    Coach = 'Rogelio Nakamura'
+    try:
+        DF = DF.drop(Coach)
+        print('Successful dropping.')
+        # DF.dtypes
+    except KeyError:
+        print('Coach not found. Please fix.')
+
+    DF = DF.set_index(['POS'])
+    DF = DF.transpose()
+    print(DF)
+    # Find best GK:
+    print(DF.sort_values('GK', ascending=False).head(2))
+
+    #print(DF.loc['Hossam Ayoub']['FW']) gets score
+
+    #Need to add more
+
+    return DF
+
+
+def determine_lineup_score(lineup_dict, DF):
+    """Determine lineup score using scores in DF.
+            lineup_dict = {players_name, position}
+            DF is Positions as columns, Names as rows
+    """
+    lineup_dict = {'Hossam Ayoub':'FW', 'Jack McCray':'GK' }
+    score = 0
+    for player in lineup_dict:
+        position_score = DF.loc[player][lineup_dict[player]]
+        score += position_score
+        
+    print(score)
+    return score
+
+def export_result_df(Filename, DF):
+    DF.to_excel(Filename+'.xlsx')
     print('Exported')
     print('Check the folder')
+
 
 def plot_pd():
     #df.plot.bar(x='Experience',y='Name')
     print('No plot to see here')
-    
+
+
 if __name__ == "__main__":
     main()
-    read_using_pd()
-    analyze_pd()
+    df, df0 = read_using_pd()
     plot_pd()
-    #top5spots()
-    topspotsdf(10) #Enter in how many top spots
-    result_df_sort() #Needs work
+    df = topspotsdf(22, df, df0) #Enter in how many top spots
+    df = result_df_sort(df, df0) #Needs work
+    df_by_names = select_starting_roster(df)
+    determine_lineup_score({}, df_by_names)
+
     x = input('Do you want to export file? y/n:  ')
     if x == 'y':
-        export_result_df('Team_Results')
+        export_result_df('Team_Results', df)
     else:
         print("That's okay")
 
