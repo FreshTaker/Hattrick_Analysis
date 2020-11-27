@@ -378,7 +378,7 @@ def determine_lineup_score(lineup_dict, DF):
     for player in lineup_dict:
         position_score = DF.loc[player][lineup_dict[player]]
         score += position_score
-        
+
     print(score)
     return score
 
