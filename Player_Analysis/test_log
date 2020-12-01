@@ -13,3 +13,21 @@ Score: 110.50300000000001
 Score: 119.97399999999999
 {'Hossam Ayoub': 'FW', 'Mazen Dergham': 'FW', 'Cole Frampton': 'ILRM', 'Steven Shotwell': 'ILRM', 'Longino Arreola': 'W', 'Pacífico Alpízar': 'W', 'Israel Vernon': 'WB', 'Joey Cartwright': 'WB', 'Philip Lehman': 'CLRD', 'Jared Vernon': 'CLRD'}
 
+Removed Trainees (W, WB):
+Score: 73.083
+{'Roy Belcher': 'FW', 'Hossam Ayoub': 'FW', 'Longino Arreola': 'ILRM', 'Steven Shotwell': 'ILRM', 'Jared Vernon': 'CLRD', 'Peter Krüsch': 'CLRD'}
+
+2nd Lineup:
+Score: 69.35000000000001
+{'Joey Cartwright': 'FW', 'Mazen Dergham': 'FW', 'Homero Elías Calles': 'ILRM', 'Cole Frampton': 'ILRM', 'Israel Vernon': 'CLRD', 'Demetrius Machen': 'CLRD'}
+
+
+Score for the First Lineup: 72.414
+{'Mazen Dergham': 'FW', 'Hossam Ayoub': 'FW', 'Longino Arreola': 'ILRM', 'Roy Belcher': 'ILRM', 'Peter Krüsch': 'CLRD', 'Demetrius Machen': 'CLRD'}
+Score for the Second Lineup: 64.796
+{'Joey Cartwright': 'FW', 'Tom Hayden': 'FW', 'Austin Liner': 'ILRM', 'Cole Frampton': 'ILRM', 'Jared Vernon': 'CLRD', 'Israel Vernon': 'CLRD'}
+POS                    IMW    FWW      W   ILRM  ...  CLRD   CCD    WO    GK
+Homero Elías Calles  14.49   9.28  12.46  12.34  ...  9.10  7.80  6.25  4.48
+Philip Lehman        12.77   7.56  10.37  11.75  ...  9.10  7.80  5.63  4.48
+Pacífico Alpízar     14.72  10.21  13.24  11.93  ...  8.85  7.55  6.47  4.48
+Steven Shotwell      13.05   8.68   9.78  12.97  ...  7.83  6.79  5.90  3.88

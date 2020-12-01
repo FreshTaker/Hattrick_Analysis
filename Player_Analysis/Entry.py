@@ -339,14 +339,26 @@ def format_roster(DF):
         # DF.dtypes
     except KeyError:
         print('Coach not found. Please fix.')
-
+    print('Whole Team Roster:')
     print(DF)
-    # Find best GK:
-    #print(DF.sort_values('GK', ascending=False))
-    #print(DF.iloc[0].name)
-    print(DF.loc['Hossam Ayoub']['GK']) #gets score
-    #print(len(DF))
+    # Remove GKs
+    try:
+        DF = DF.drop('Jack McCray')
+        DF = DF.drop('Phil Peeples')
+    except Exception as e:
+        print(e)
+
+    # Remove Trainees
+    try:
+        trainees = ['Leopold Vach', 'Daniele Passarin', 'Sergiusz Soplica', 'Samuele Camaiani', 'Giovanni Plazas',
+                    'Yuanfu Fu', 'František Panec', 'Andrei Dochioiu', 'Detlef Wetter', 'Achikam Givon']
+        for player in trainees:
+            DF = DF.drop(player)
+    except Exception as e:
+        print(e)
+
     return DF
+
 
 def random_lineup(DF):
     """create random 11 person lineup
@@ -355,17 +367,9 @@ def random_lineup(DF):
     lineup_dict = {players_name, position}
     DF is Positions as columns, Names as rows
     """
-    formation = ['GK', 'FW', 'FW', 'ILRM', 'ILRM', 'W', 'W', 'WB', 'WB', 'CLRD', 'CLRD']
-    spots = 11
-    drop_GKs = True
-    if drop_GKs is True:
-        try:
-            formation.remove('GK')
-            DF.drop('Jack McCray')
-            DF.drop('Phil Peeples')
-            spots -= 2
-        except Exception as e:
-            print(e)
+    formation = ['FW', 'FW', 'ILRM', 'ILRM', 'CLRD', 'CLRD']
+    # Removed GK, W, W, WB, & WB
+    spots = 6
 
     players_index = []
     while spots >= 0:
@@ -375,8 +379,15 @@ def random_lineup(DF):
             spots -= 1
     lineup_dict = {}
     for players_i, position in zip(players_index, formation):
-        lineup_dict[DF.iloc[players_i].name] = position
-    return lineup_dict
+        lineup_dict[DF.iloc[players_i].name] = str(position)
+    return lineup_dict, DF
+
+
+def clean_DF(lineup_dict, DF):
+    """Removes the players from in the lineup_dict from the DF"""
+    for player in lineup_dict:
+        DF = DF.drop(player)
+    return DF
 
 
 def determine_lineup_score(lineup_dict, DF):
@@ -393,21 +404,28 @@ def determine_lineup_score(lineup_dict, DF):
         score += position_score
     return score
 
+
 def do_lineup_iterations(iterations, DF):
-    """Do number of iterations to find the best lineup"""
+    """Do number of iterations to find the best lineup.  Returns cleaned DF"""
     best_score = 0
     best_lineup = []
+    best_cleaned_DF = 0
     for i in range(iterations):
-        lineup_dict = random_lineup(DF)
+        lineup_dict, r_DF = random_lineup(DF)
         score = determine_lineup_score(lineup_dict, DF)
         if score > best_score:
             best_score = score
             best_lineup = lineup_dict
+            r_DF = clean_DF(lineup_dict, r_DF)
+            best_cleaned_DF = r_DF
             print(score, lineup_dict)
+
         print(i, score)
-    print('This is the best lineup:')
-    print(f'Score: {best_score}')
-    print(best_lineup)
+    #print('This is the best lineup:')
+    #print(f'Score: {best_score}')
+    #print(best_lineup)
+    #print(best_cleaned_DF)
+    return best_cleaned_DF, best_lineup, best_score
 
 
 def export_result_df(Filename, DF):
@@ -428,7 +446,13 @@ if __name__ == "__main__":
     df = topspotsdf(23, df, df0) #Enter in how many top spots
     df = result_df_sort(df, df0) #Needs work
     df_by_names = format_roster(df)
-    do_lineup_iterations(10000, df_by_names)
+    df_by_names2, lineup1, score1 = do_lineup_iterations(10000, df_by_names)
+    df_by_names3, lineup2, score2 = do_lineup_iterations(10000, df_by_names2)
+    print(f'Score for the First Lineup: {score1}')
+    print(lineup1)
+    print(f'Score for the Second Lineup: {score2}')
+    print(lineup2)
+    print(df_by_names3)
 
     x = input('Do you want to export file? y/n:  ')
     if x == 'y':
