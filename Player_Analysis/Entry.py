@@ -8,26 +8,20 @@
     Author: Paul Brockmann
 """
 
-import csv
 import tkinter
 from tkinter.filedialog import askopenfilename
 import pandas as pd
 import random
+import matplotlib.pyplot as plt
+from statistics import mean, quantiles
 
-def main():
+
+def select_csv_file():
     """Select CSV File"""
     global INPUT_DIR
     tkinter.Tk().withdraw() # Close the root window
     INPUT_DIR = askopenfilename()
     print(INPUT_DIR)
-    
-def load_csv():
-    """Load CSV file"""
-    with open(INPUT_DIR,newline='',encoding='utf-8') as csvfile:
-        print(csv.list_dialects())
-        reader = csv.reader(csvfile, dialect='excel')
-        for row in reader:
-            print(row)
 
 
 def read_using_pd():
@@ -327,49 +321,76 @@ def result_df_sort(DF, DF0):
     return result_df2
 
 
-def format_roster(DF):
-    """DF starts with players names as columns, rows are 0 - 22"""
-    print('Dropping Coach')
-    Coach = 'Rogelio Nakamura'
+def format_roster(DF, formation):
+    """
+    Cleans up dataframe by removing the coach, GKs, and trainees.
+    Maintains the formation list.
+
+    DF starts with players names as columns, rows are 0 - 22
+    """
     DF = DF.set_index(['POS'])
     DF = DF.transpose()
-    try:
-        DF = DF.drop(Coach)
-        print('Successful dropping.')
-        # DF.dtypes
-    except KeyError:
-        print('Coach not found. Please fix.')
+
+    # Remove Coach?
+    coach = 'Rogelio Nakamura'
+    drop_coach = input(f'Should Coach {coach}, be dropped? (y/n): ')
+    if drop_coach.lower() == "y":
+        print('Dropping Coach')
+        try:
+            DF = DF.drop(coach)
+            print('Successful dropping.')
+        except KeyError:
+            print('Coach not found. Please fix.')
+    else:
+        print('Coach not dropped.')
     print('Whole Team Roster:')
     print(DF)
-    # Remove GKs
-    try:
-        DF = DF.drop('Jack McCray')
-        DF = DF.drop('Phil Peeples')
-    except Exception as e:
-        print(e)
 
-    # Remove Trainees
-    try:
-        trainees = ['Leopold Vach', 'Daniele Passarin', 'Sergiusz Soplica', 'Samuele Camaiani', 'Giovanni Plazas',
-                    'Yuanfu Fu', 'František Panec', 'Andrei Dochioiu', 'Detlef Wetter', 'Achikam Givon']
-        for player in trainees:
-            DF = DF.drop(player)
-    except Exception as e:
-        print(e)
+    # Remove GKs?
+    goalkeepers = ['Jack McCray', 'Phil Peeples']
+    drop_goalkeepers = input(f'Should the goalkeepers, \n{goalkeepers}, \nbe dropped? (y,n): ')
+    if drop_goalkeepers.lower() == 'y':
+        try:
+            formation.remove('GK')  #only one in formation
+            for player in goalkeepers:
+                DF = DF.drop(player)
+                print(f'Dropped {player} (Goalkeeper)')
+        except Exception as e:
+            print(e)
+    else:
+        print('Goalkeepers are not dropped.')
 
-    return DF
+    # Remove Trainees?
+    trainees = ['Leopold Vach', 'Daniele Passarin', 'Sergiusz Soplica', 'Samuele Camaiani', 'Giovanni Plazas',
+                'Yuanfu Fu', 'František Panec', 'Andrei Dochioiu', 'Detlef Wetter', 'Achikam Givon']
+    training_positions = ['W', 'WB']
+    drop_trainees = input(f'Should the {len(trainees)} trainees for {training_positions} be dropped? (y,n): ')
+    if drop_trainees.lower() == 'y':
+        try:
+            for position in training_positions:
+                for n in range(formation.count(position)):
+                    formation.remove(position)
+            for player in trainees:
+                DF = DF.drop(player)
+                print(f'Dropped {player} (Trainnee)')
+        except Exception as e:
+            print(e)
+    else:
+        print('Trainees are not dropped.')
+    print(f'Formation = {formation}')
+    return DF, formation
 
 
-def random_lineup(DF):
+def random_lineup(DF, formation):
     """create random 11 person lineup
     starting with 4-4-2 layout (DEF, MID, FW + assumed GK)
     (1xGK, 2xFW, 2xILRM, 2xW, 2xWB, 2xCLRD)
     lineup_dict = {players_name, position}
     DF is Positions as columns, Names as rows
     """
-    formation = ['FW', 'FW', 'ILRM', 'ILRM', 'CLRD', 'CLRD']
+    #formation = ['FW', 'FW', 'ILRM', 'ILRM', 'CLRD', 'CLRD']
     # Removed GK, W, W, WB, & WB
-    spots = 6
+    spots = len(formation)
 
     players_index = []
     while spots >= 0:
@@ -402,17 +423,20 @@ def determine_lineup_score(lineup_dict, DF):
         if position_score == 'NaN':
             position_score = 0
         score += position_score
+    score = round(score, 1)
     return score
 
 
-def do_lineup_iterations(iterations, DF):
+def do_lineup_iterations(iterations, DF, formation):
     """Do number of iterations to find the best lineup.  Returns cleaned DF"""
     best_score = 0
     best_lineup = []
     best_cleaned_DF = 0
+    score_history = []
     for i in range(iterations):
-        lineup_dict, r_DF = random_lineup(DF)
+        lineup_dict, r_DF = random_lineup(DF, formation)
         score = determine_lineup_score(lineup_dict, DF)
+        score_history.append(score)
         if score > best_score:
             best_score = score
             best_lineup = lineup_dict
@@ -421,11 +445,7 @@ def do_lineup_iterations(iterations, DF):
             print(score, lineup_dict)
 
         print(i, score)
-    #print('This is the best lineup:')
-    #print(f'Score: {best_score}')
-    #print(best_lineup)
-    #print(best_cleaned_DF)
-    return best_cleaned_DF, best_lineup, best_score
+    return best_cleaned_DF, best_lineup, best_score, score_history
 
 
 def export_result_df(Filename, DF):
@@ -434,25 +454,58 @@ def export_result_df(Filename, DF):
     print('Check the folder')
 
 
-def plot_pd():
-    #df.plot.bar(x='Experience',y='Name')
-    print('No plot to see here')
+def plot_iterations(score_history1, score_history2):
+    """Plot iterations"""
+    length_history = max(len(score_history1), len(score_history2))
+    py_mean1 = mean(score_history1).item()
+    py_mean2 = mean(score_history2).item()
+    print(py_mean1, py_mean2)
+    quart1 = quantiles(score_history1, n=4)
+    quart2 = quantiles(score_history2, n=4)
+    print(quart1)
+    print(quart2)
+    x = list(range(1, length_history+1))
+    x1 = list(range(1, len(score_history1)+1))
+    x2 = list(range(1, len(score_history2)+1))
+    average1 = [py_mean1] * length_history
+    average2 = [py_mean2] * length_history
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    #ax.scatter(x1, score_history1, color='red', marker='*', label='1st Line')
+    #ax.scatter(x2, score_history2, color='blue', marker='x', label='2nd Line')
+    ax.plot(x, average1, color='red', linewidth=2, label='1st Line Avg')
+    ax.plot(x, average2, color='blue', linewidth=2, label='2st Line Avg')
+    ax.plot(x, [quart1[0]]*length_history, color='red', linewidth=3, dashes=[5, 2, 1, 2])
+    ax.plot(x, [quart1[1]]*length_history, color='red', linewidth=1, dashes=[5, 2, 1, 2])
+    ax.plot(x, [quart1[2]]*length_history, color='red', linewidth=1, dashes=[5, 2, 1, 2])
+    ax.plot(x, [quart2[0]]*length_history, color='blue', linewidth=1, dashes=[5, 2, 1, 2])
+    ax.plot(x, [quart2[1]]*length_history, color='blue', linewidth=1, dashes=[5, 2, 1, 2])
+    ax.plot(x, [quart2[2]]*length_history, color='blue', linewidth=1, dashes=[5, 2, 1, 2])
+    ax.legend()
+    ax.grid(True)
+    ax.set(title='Lineup Comparison',
+           ylabel='Score',
+           xlabel='iterations')
+    figure_name = 'iteration_history.png'
+    plt.savefig(figure_name)
+    print(f'Plot Created and saved as {figure_name}')
 
 
 if __name__ == "__main__":
-    main()
+    select_csv_file()
     df, df0 = read_using_pd()
-    plot_pd()
     df = topspotsdf(23, df, df0) #Enter in how many top spots
     df = result_df_sort(df, df0) #Needs work
-    df_by_names = format_roster(df)
-    df_by_names2, lineup1, score1 = do_lineup_iterations(10000, df_by_names)
-    df_by_names3, lineup2, score2 = do_lineup_iterations(10000, df_by_names2)
+    formation = ['GK', 'W', 'W', 'WB', 'WB', 'FW', 'FW', 'ILRM', 'ILRM', 'CLRD', 'CLRD'] #Should be 11
+    df_by_names, formation = format_roster(df, formation)
+    df_by_names2, lineup1, score1, score_history1 = do_lineup_iterations(100000, df_by_names, formation)
+    df_by_names3, lineup2, score2, score_history2 = do_lineup_iterations(2000, df_by_names2, formation)
     print(f'Score for the First Lineup: {score1}')
     print(lineup1)
     print(f'Score for the Second Lineup: {score2}')
     print(lineup2)
     print(df_by_names3)
+    plot_iterations(score_history1, score_history2)
 
     x = input('Do you want to export file? y/n:  ')
     if x == 'y':

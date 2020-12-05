@@ -1,26 +1,3 @@
-Score: 126.37299999999999
-{'Jack McCray': 'GK', 'Roy Belcher': 'FW', 'Mazen Dergham': 'FW', 'Pacífico Alpízar': 'ILRM', 'Joey Cartwright': 'ILRM', 'Tom Hayden': 'W', 'Steven Shotwell': 'W', 'Israel Vernon': 'WB', 'Jared Vernon': 'WB', 'Homero Elías Calles': 'CLRD', 'Demetrius Machen': 'CLRD'}
-
-Score: 124.24999999999999
-{'Jack McCray': 'GK', 'Hossam Ayoub': 'FW', 'Steven Shotwell': 'FW', 'Longino Arreola': 'ILRM', 'Homero Elías Calles': 'ILRM', 'Philip Lehman': 'W', 'Jared Vernon': 'W', 'Israel Vernon': 'WB', 'Pacífico Alpízar': 'WB', 'Peter Krüsch': 'CLRD', 'Tom Hayden': 'CLRD'}
-
-Score: 128.104
-{'Jack McCray': 'GK', 'Hossam Ayoub': 'FW', 'Mazen Dergham': 'FW', 'Homero Elías Calles': 'ILRM', 'Jared Vernon': 'ILRM', 'Joey Cartwright': 'W', 'Israel Vernon': 'W', 'Tom Hayden': 'WB', 'Pacífico Alpízar': 'WB', 'Peter Krüsch': 'CLRD', 'Austin Liner': 'CLRD'}
-
-Removed GKs:
-Score: 110.50300000000001
-{'Mazen Dergham': 'FW', 'Roy Belcher': 'FW', 'Steven Shotwell': 'ILRM', 'Joey Cartwright': 'ILRM', 'Tom Hayden': 'W', 'Pacífico Alpízar': 'W', 'Philip Lehman': 'WB', 'Hossam Ayoub': 'WB', 'Austin Liner': 'CLRD', 'Jared Vernon': 'CLRD'}
-Score: 119.97399999999999
-{'Hossam Ayoub': 'FW', 'Mazen Dergham': 'FW', 'Cole Frampton': 'ILRM', 'Steven Shotwell': 'ILRM', 'Longino Arreola': 'W', 'Pacífico Alpízar': 'W', 'Israel Vernon': 'WB', 'Joey Cartwright': 'WB', 'Philip Lehman': 'CLRD', 'Jared Vernon': 'CLRD'}
-
-Removed Trainees (W, WB):
-Score: 73.083
-{'Roy Belcher': 'FW', 'Hossam Ayoub': 'FW', 'Longino Arreola': 'ILRM', 'Steven Shotwell': 'ILRM', 'Jared Vernon': 'CLRD', 'Peter Krüsch': 'CLRD'}
-
-2nd Lineup:
-Score: 69.35000000000001
-{'Joey Cartwright': 'FW', 'Mazen Dergham': 'FW', 'Homero Elías Calles': 'ILRM', 'Cole Frampton': 'ILRM', 'Israel Vernon': 'CLRD', 'Demetrius Machen': 'CLRD'}
-
 
 Score for the First Lineup: 72.414
 {'Mazen Dergham': 'FW', 'Hossam Ayoub': 'FW', 'Longino Arreola': 'ILRM', 'Roy Belcher': 'ILRM', 'Peter Krüsch': 'CLRD', 'Demetrius Machen': 'CLRD'}
@@ -29,5 +6,9 @@ Score for the Second Lineup: 64.796
 POS                    IMW    FWW      W   ILRM  ...  CLRD   CCD    WO    GK
 Homero Elías Calles  14.49   9.28  12.46  12.34  ...  9.10  7.80  6.25  4.48
 Philip Lehman        12.77   7.56  10.37  11.75  ...  9.10  7.80  5.63  4.48
-Pacífico Alpízar     14.72  10.21  13.24  11.93  ...  8.85  7.55  6.47  4.48
 Steven Shotwell      13.05   8.68   9.78  12.97  ...  7.83  6.79  5.90  3.88
+#Pacífico Alpízar     14.72  10.21  13.24  11.93  ...  8.85  7.55  6.47  4.48 Transfered
+
+BEST LINEUP (Ladder) - 12/5/2020
+Score for the First Lineup: 119.84300000000002
+{'Homero Elías Calles': 'W', 'Andrei Dochioiu': 'W', 'Israel Vernon': 'WB', 'Joey Cartwright': 'WB', 'Hossam Ayoub': 'FW', 'Roy Belcher': 'FW', 'Giovanni Plazas': 'ILRM', 'Tom Hayden': 'ILRM', 'Jared Vernon': 'CLRD', 'Peter Krüsch': 'CLRD'}
