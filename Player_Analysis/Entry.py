@@ -6,6 +6,14 @@
     analyzes the players in every possible position, 
     and exports data in an excel file.
     Author: Paul Brockmann
+
+    How to Use:
+    1) Download most recent team roster as a csv (use Firefox instead of Safari).
+    2) Move csv file into Player_Analysis folder.
+    3) If new coach or trainees, update script with names.
+    4) Run Script.
+        4.1) If just an excel sheet with player position ratings.
+        4.2)
 """
 
 import tkinter
@@ -498,18 +506,26 @@ if __name__ == "__main__":
     df = result_df_sort(df, df0) #Needs work
     formation = ['GK', 'W', 'W', 'WB', 'WB', 'FW', 'FW', 'ILRM', 'ILRM', 'CLRD', 'CLRD'] #Should be 11
     df_by_names, formation = format_roster(df, formation)
-    df_by_names2, lineup1, score1, score_history1 = do_lineup_iterations(100000, df_by_names, formation)
-    df_by_names3, lineup2, score2, score_history2 = do_lineup_iterations(2000, df_by_names2, formation)
-    print(f'Score for the First Lineup: {score1}')
-    print(lineup1)
-    print(f'Score for the Second Lineup: {score2}')
-    print(lineup2)
-    print(df_by_names3)
-    plot_iterations(score_history1, score_history2)
 
-    x = input('Do you want to export file? y/n:  ')
+    yn_lineup_iterations = input('Do you want to iterate to find the best lineup? y/n:  ')
+    if yn_lineup_iterations == 'y':
+        yn_second_lineup_iterations = input('Do you want to interate to find the 2nd Lineup? y/n:  ')
+        df_by_names2, lineup1, score1, score_history1 = do_lineup_iterations(100000, df_by_names, formation)
+        print(f'Score for the First Lineup: {score1}')
+        print(lineup1)
+        if yn_second_lineup_iterations == 'y':
+            df_by_names3, lineup2, score2, score_history2 = do_lineup_iterations(2000, df_by_names2, formation)
+            print(f'Score for the First Lineup: {score1}')
+            print(lineup1)
+            print(f'Score for the Second Lineup: {score2}')
+            print(lineup2)
+            print(df_by_names3)
+            plot_iterations(score_history1, score_history2)
+
+    x = input('Do you want to export the player position ratings file? y/n:  ')
     if x == 'y':
         export_result_df('Team_Results', df)
-        print('Exported results')
+        print('Exported results to Team_Results.xlsx')
     else:
         print('Did not export results')
+    print('END OF PROGRAM')
